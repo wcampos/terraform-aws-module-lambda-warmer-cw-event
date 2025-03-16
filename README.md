@@ -1,19 +1,40 @@
 # Terraform AWS module for Lambda Warmer CW Event
 
-The module will deploy a CloudWatch Event Rule that keep the lambda warm based on a time interval (default: 5m)
+This module creates a CloudWatch Event Rule that keeps a Lambda function warm by periodically invoking it based on a configurable time interval.
 
-## How to use
+## Features
 
-Example
-```bash 
-module "my_lambda_function_warmer_name" {
-    function_name = "myLambdaFunctionName"
-    warmer_rate   = 10
+- Configurable warming interval (1-1440 minutes)
+- Optional enabling/disabling of the warmer
+- Custom input payload support for Lambda invocation
+- Resource tagging support
+- Custom description for CloudWatch Event rule
+- Input validation for required parameters
+
+## Usage
+
+```hcl
+module "lambda_warmer" {
+  source = "github.com/your-org/terraform-aws-module-lambda-warmer-cw-event"
+
+  function_name = "my-lambda-function"
+  warmer_rate   = 5  # Warm every 5 minutes
+  enabled       = true
+  description   = "Custom description for the warmer"
+  target_input  = jsonencode({ "warmup": true })
+  
+  tags = {
+    Environment = "production"
+    Project     = "my-project"
+  }
 }
 ```
+
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
 
 ## Providers
 
@@ -38,9 +59,21 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_function_name"></a> [function\_name](#input\_function\_name) | Name of the lambda function to warm | `string` | `""` | no |
-| <a name="input_warmer_rate"></a> [warmer\_rate](#input\_warmer\_rate) | Time interval to warm the function | `number` | `"5"` | no |
+| <a name="input_function_name"></a> [function\_name](#input\_function\_name) | Name of the lambda function to warm | `string` | n/a | yes |
+| <a name="input_warmer_rate"></a> [warmer\_rate](#input\_warmer\_rate) | Time interval in minutes to warm the function (1-1440) | `number` | `5` | no |
+| <a name="input_enabled"></a> [enabled](#input\_enabled) | Whether to enable the lambda warmer | `bool` | `true` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
+| <a name="input_description"></a> [description](#input\_description) | Description for the CloudWatch Event rule | `string` | `null` | no |
+| <a name="input_target_input"></a> [target\_input](#input\_target\_input) | Input to pass to the Lambda function when warming | `string` | `"{}"` | no |
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_cloudwatch_event_rule_arn"></a> [cloudwatch\_event\_rule\_arn](#output\_cloudwatch\_event\_rule\_arn) | ARN of the CloudWatch Event rule |
+| <a name="output_cloudwatch_event_rule_name"></a> [cloudwatch\_event\_rule\_name](#output\_cloudwatch\_event\_rule\_name) | Name of the CloudWatch Event rule |
+| <a name="output_lambda_permission_id"></a> [lambda\_permission\_id](#output\_lambda\_permission\_id) | ID of the Lambda permission |
+
+## License
+
+This module is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
