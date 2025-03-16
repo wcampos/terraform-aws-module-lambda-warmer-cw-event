@@ -26,6 +26,12 @@ jobs:
         run: terraform fmt -check
         continue-on-error: true
 
+      - name: Create dummy tfvars
+        run: |
+          cat > terraform.tfvars <<EOF
+          function_name = "dummy-function"
+          EOF
+
       - name: Terraform Init
         id: init
         run: terraform init -backend=false
