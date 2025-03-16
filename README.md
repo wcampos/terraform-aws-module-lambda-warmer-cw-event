@@ -39,8 +39,7 @@ This module uses date-based versioning (YYYYMMDD format). You can find all avail
 
 The module uses GitHub Actions to automatically:
 - Create a new version tag using the current date (YYYYMMDD format) when changes are pushed to the master branch
-- Create a GitHub release with the new version
-- Update the Terraform Registry
+- Create a GitHub release with the new version and auto-generated release notes
 - Tag the release in Git
 
 For example, if you push to master on March 16, 2024, it will create version `20240316`.
