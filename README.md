@@ -10,13 +10,14 @@ This module creates a CloudWatch Event Rule that keeps a Lambda function warm by
 - Resource tagging support
 - Custom description for CloudWatch Event rule
 - Input validation for required parameters
-- Date-based versioning on master branch pushes
+- Timestamp-based versioning on master branch pushes
+- Automated Terraform validation
 
 ## Usage
 
 ```hcl
 module "lambda_warmer" {
-  source = "github.com/wcampos/terraform-aws-module-lambda-warmer-cw-event?ref=20240316"
+  source = "github.com/wcampos/terraform-aws-module-lambda-warmer-cw-event?ref=v20240316123456"
 
   function_name = "my-lambda-function"
   warmer_rate   = 5  # Warm every 5 minutes
@@ -33,22 +34,27 @@ module "lambda_warmer" {
 
 ## Versioning
 
-This module uses date-based versioning (YYYYMMDD format). You can find all available versions in the [releases page](https://github.com/wcampos/terraform-aws-module-lambda-warmer-cw-event/releases).
+This module uses timestamp-based versioning (YYYYMMDDhhmmss format). You can find all available versions in the [releases page](https://github.com/wcampos/terraform-aws-module-lambda-warmer-cw-event/releases).
 
 ### Automatic Versioning
 
 The module uses GitHub Actions to automatically:
-- Create a new version tag using the current date (YYYYMMDD format) when changes are pushed to the master branch
-- Create a GitHub release with the new version and auto-generated release notes
-- Tag the release in Git
+1. Validate Terraform code:
+   - Check formatting
+   - Initialize Terraform
+   - Validate configuration
+2. Create releases (on master branch push only):
+   - Create a new version tag using the current timestamp
+   - Create a GitHub release with the new version
+   - Tag the release in Git
 
-For example, if you push to master on March 16, 2024, it will create version `20240316`.
+For example, if you push to master on March 16, 2024 at 12:34:56, it will create version `v20240316123456`.
 
 To use a specific version of the module, specify the version in the source URL:
 
 ```hcl
 module "lambda_warmer" {
-  source = "github.com/wcampos/terraform-aws-module-lambda-warmer-cw-event?ref=20240316"
+  source = "github.com/wcampos/terraform-aws-module-lambda-warmer-cw-event?ref=v20240316123456"
   # ... rest of the configuration
 }
 ```
@@ -58,6 +64,7 @@ module "lambda_warmer" {
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0 |
 
 ## Providers
 
