@@ -10,12 +10,13 @@ This module creates a CloudWatch Event Rule that keeps a Lambda function warm by
 - Resource tagging support
 - Custom description for CloudWatch Event rule
 - Input validation for required parameters
+- Automatic versioning on master branch pushes
 
 ## Usage
 
 ```hcl
 module "lambda_warmer" {
-  source = "github.com/your-org/terraform-aws-module-lambda-warmer-cw-event"
+  source = "github.com/wcampos/terraform-aws-module-lambda-warmer-cw-event?ref=v1.0.0"
 
   function_name = "my-lambda-function"
   warmer_rate   = 5  # Warm every 5 minutes
@@ -27,6 +28,38 @@ module "lambda_warmer" {
     Environment = "production"
     Project     = "my-project"
   }
+}
+```
+
+## Versioning
+
+This module follows [Semantic Versioning](https://semver.org/). You can find all available versions in the [releases page](https://github.com/wcampos/terraform-aws-module-lambda-warmer-cw-event/releases).
+
+### Automatic Versioning
+
+The module uses GitHub Actions to automatically:
+- Create a new patch version when changes are pushed to the master branch
+- Create a GitHub release with the new version
+- Update the Terraform Registry
+- Tag the release in Git
+
+For example, if the latest version is `v1.0.0`, pushing to master will automatically create `v1.0.1`.
+
+### Manual Versioning
+
+For major or minor version updates, you can manually create and push a tag:
+
+```bash
+git tag v1.1.0  # For minor version update
+git push origin v1.1.0
+```
+
+To use a specific version of the module, specify the version in the source URL:
+
+```hcl
+module "lambda_warmer" {
+  source = "github.com/wcampos/terraform-aws-module-lambda-warmer-cw-event?ref=v1.0.0"
+  # ... rest of the configuration
 }
 ```
 
